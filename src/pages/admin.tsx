@@ -1,4 +1,8 @@
-import { useGame, OutcomeOverride } from '../context/GameContext';
+import {
+  useGame,
+  OutcomeOverride,
+  PAYOUTS,
+} from '../context/GameContext';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -324,10 +328,15 @@ export default function AdminPanel() {
                       🎰 Slot Machine Logic
                     </h3>
                     <p className="text-sm">
-                      This simulator uses a weighted random system.
-                      Each reel has symbols with different
-                      probabilities: 🍒 (40%), 🍋 (30%), 🍊 (20%), 💎
-                      (8%), and 🎰 (2%).
+                      This simulator uses a simple random system. Each
+                      of the 7 symbols—
+                      <span className="font-mono">
+                        🍒 🍋 🍊 🔔 ⭐ 💎 🧨
+                      </span>
+                      —has an equal probability of appearing on each
+                      reel (approx. 14.3%). There is no weighting;
+                      every spin is purely random unless overridden by
+                      an admin.
                     </p>
                   </div>
 
@@ -375,68 +384,28 @@ export default function AdminPanel() {
                 <div className="mt-6">
                   <div className="bg-gray-50 rounded-lg p-4 mb-4">
                     <h3 className="font-semibold text-gray-800 mb-3">
-                      Winning Combinations (3 matching symbols)
+                      Winning Combinations
                     </h3>
-                    <div className="space-y-3 text-gray-700">
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🎰🎰🎰</span>
-                          <span className="font-medium">
-                            Triple Jackpot
-                          </span>
-                        </div>
-                        <span className="font-bold text-green-600">
-                          50x bet
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">💎💎💎</span>
-                          <span className="font-medium">
-                            Triple Diamond
-                          </span>
-                        </div>
-                        <span className="font-bold text-green-600">
-                          25x bet
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🍊🍊🍊</span>
-                          <span className="font-medium">
-                            Triple Orange
-                          </span>
-                        </div>
-                        <span className="font-bold text-green-600">
-                          10x bet
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🍋🍋🍋</span>
-                          <span className="font-medium">
-                            Triple Lemon
-                          </span>
-                        </div>
-                        <span className="font-bold text-green-600">
-                          5x bet
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🍒🍒🍒</span>
-                          <span className="font-medium">
-                            Triple Cherry
-                          </span>
-                        </div>
-                        <span className="font-bold text-green-600">
-                          3x bet
-                        </span>
-                      </div>
+                    <div className="space-y-2 text-gray-700">
+                      {Object.entries(PAYOUTS)
+                        .sort(([, a], [, b]) => b - a) // Sort by multiplier desc
+                        .map(([combination, multiplier]) => (
+                          <div
+                            key={combination}
+                            className="flex justify-between items-center py-2 px-3 bg-white rounded shadow-sm"
+                          >
+                            <div className="flex items-center space-x-4">
+                              <span className="text-2xl font-mono">
+                                {[...combination]
+                                  .map((c) => (c === ' ' ? '' : c))
+                                  .join(' ')}
+                              </span>
+                            </div>
+                            <span className="font-bold text-green-600">
+                              {multiplier}x bet
+                            </span>
+                          </div>
+                        ))}
                     </div>
                   </div>
 
@@ -446,9 +415,12 @@ export default function AdminPanel() {
                     </h4>
                     <p className="text-sm text-yellow-800">
                       While high payouts look attractive, remember
-                      that 🎰 symbols only appear 2% of the time per
-                      reel. The chance of hitting 🎰🎰🎰 is only
-                      0.008% (1 in 12,500 spins).
+                      there are 7 unique symbols. The probability of
+                      hitting the top prize (💎💎💎) is (1/7) * (1/7)
+                      * (1/7), which is approximately 0.29% or about 1
+                      in 343 spins. The actual overall win rate is
+                      higher due to the many other winning
+                      combinations.
                     </p>
                   </div>
                 </div>
