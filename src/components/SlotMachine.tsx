@@ -85,10 +85,10 @@ export default function SlotMachine() {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-white mb-2">
-          🎰 Responsible Gambling Simulator
+          🎰 Pragmatic Play - No. 1 Slot Gacor
         </h1>
         <p className="text-purple-200">
-          Educational Demo - No Real Money Involved
+          Situs judi slot online terpopuler & terpercaya di Indonesia
         </p>
       </div>
 
