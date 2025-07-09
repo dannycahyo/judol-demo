@@ -13,9 +13,12 @@ export default async function handler(
     // Initialize database on first request
     await initializeDatabase();
 
-    const outcomeOverride = await getGameSettings();
+    const settings = await getGameSettings();
 
-    res.status(200).json({ outcomeOverride });
+    res.status(200).json({
+      outcomeOverride: settings.outcomeOverride,
+      updatedAt: settings.updatedAt,
+    });
   } catch (error) {
     console.error('Error in game-settings API:', error);
     res.status(500).json({ error: 'Internal server error' });

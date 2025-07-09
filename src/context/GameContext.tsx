@@ -61,9 +61,59 @@ export function GameProvider({ children }: { children: ReactNode }) {
     reels: ['🍒', '🍋', '🍊'],
   });
 
-  // Load outcome override from API on component mount
+  // Connect to SSE for real-time updates
   useEffect(() => {
-    const fetchGameSettings = async () => {
+    let eventSource: EventSource | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
+
+    const connectToSSE = () => {
+      try {
+        eventSource = new EventSource('/api/game-events');
+
+        eventSource.onopen = () => {
+          // Connection established
+        };
+
+        eventSource.onmessage = (event) => {
+          try {
+            // Check if event.data is empty or undefined
+            if (!event.data || event.data.trim() === '') {
+              return;
+            }
+
+            const data = JSON.parse(event.data);
+
+            if (
+              data.type === 'settings_changed' &&
+              data.outcomeOverride
+            ) {
+              setGameState((prev) => ({
+                ...prev,
+                outcomeOverride: data.outcomeOverride,
+              }));
+            }
+          } catch (error) {
+            console.error('Error parsing SSE message:', error);
+            console.error('Raw event data:', event.data);
+          }
+        };
+
+        eventSource.onerror = () => {
+          eventSource?.close();
+
+          // Reconnect after 3 seconds
+          reconnectTimeout = setTimeout(() => {
+            connectToSSE();
+          }, 3000);
+        };
+      } catch (error) {
+        console.error('Error creating SSE connection:', error);
+        // Fallback to initial fetch if SSE fails
+        fallbackFetch();
+      }
+    };
+
+    const fallbackFetch = async () => {
       try {
         const response = await fetch('/api/game-settings');
         if (response.ok) {
@@ -78,7 +128,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    fetchGameSettings();
+    // Start SSE connection
+    connectToSSE();
+
+    // Cleanup on unmount
+    return () => {
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+      }
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
   }, []);
 
   const setBetAmount = (amount: number) => {
@@ -210,6 +271,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const setOutcomeOverride = async (override: OutcomeOverride) => {
     try {
+      console.log(`🎮 Setting outcome override to: ${override}`);
       const response = await fetch('/api/admin-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -217,12 +279,31 @@ export function GameProvider({ children }: { children: ReactNode }) {
       });
 
       if (response.ok) {
-        setGameState((prev) => ({
-          ...prev,
-          outcomeOverride: override,
-        }));
+        try {
+          const result = await response.json();
+          console.log('✅ Admin settings updated:', result);
+          setGameState((prev) => ({
+            ...prev,
+            outcomeOverride: override,
+          }));
+        } catch (jsonError) {
+          console.error(
+            'Error parsing admin settings response:',
+            jsonError,
+          );
+          // Still update local state even if JSON parsing fails
+          setGameState((prev) => ({
+            ...prev,
+            outcomeOverride: override,
+          }));
+        }
       } else {
-        console.error('Failed to update game settings');
+        console.error(
+          'Failed to update game settings. Status:',
+          response.status,
+        );
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
       }
     } catch (error) {
       console.error('Error setting outcome override:', error);

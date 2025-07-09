@@ -14,6 +14,9 @@ export default async function handler(
     await initializeDatabase();
 
     const { outcomeOverride } = req.body;
+    console.log(
+      `🎮 Admin updating game setting to: ${outcomeOverride}`,
+    );
 
     // Validate outcome override value
     if (!['RNG', 'WIN', 'LOSS'].includes(outcomeOverride)) {
@@ -23,10 +26,20 @@ export default async function handler(
     }
 
     const result = await updateGameSettings(outcomeOverride);
+    console.log(`✅ Game setting updated successfully:`, result);
 
-    res.status(200).json(result);
+    // Ensure we return valid JSON
+    return res.status(200).json({
+      success: true,
+      outcomeOverride: result.outcomeOverride,
+      updatedAt: result.updatedAt,
+    });
   } catch (error) {
     console.error('Error in admin-settings API:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({
+      error: 'Internal server error',
+      message:
+        error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 }

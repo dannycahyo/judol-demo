@@ -4,6 +4,11 @@ import { useState, useEffect } from 'react';
 export default function SlotMachine() {
   const { gameState, setBetAmount, spin } = useGame();
   const [showWinCelebration, setShowWinCelebration] = useState(false);
+  const [showAdminNotification, setShowAdminNotification] =
+    useState(false);
+  const [lastOverride, setLastOverride] = useState(
+    gameState.outcomeOverride,
+  );
 
   const handleSpin = async () => {
     if (gameState.balance < gameState.betAmount) {
@@ -24,6 +29,18 @@ export default function SlotMachine() {
     }
   }, [gameState.lastWin, gameState.isSpinning]);
 
+  // Show notification when admin updates rules in real-time
+  useEffect(() => {
+    if (
+      gameState.outcomeOverride !== lastOverride &&
+      lastOverride !== null
+    ) {
+      setShowAdminNotification(true);
+      setTimeout(() => setShowAdminNotification(false), 3000);
+    }
+    setLastOverride(gameState.outcomeOverride);
+  }, [gameState.outcomeOverride, lastOverride]);
+
   const increaseBet = () => {
     setBetAmount(gameState.betAmount + 5);
   };
@@ -34,6 +51,18 @@ export default function SlotMachine() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gradient-to-b from-purple-900 to-blue-900 rounded-2xl shadow-2xl relative">
+      {/* Admin Update Notification */}
+      {showAdminNotification && (
+        <div className="absolute top-4 right-4 bg-blue-500/90 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-bounce">
+          <div className="flex items-center space-x-2">
+            <span className="text-lg">🔄</span>
+            <span className="font-semibold">
+              Admin updated rules!
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Win Celebration Overlay */}
       {showWinCelebration && gameState.lastWin > 0 && (
         <div className="absolute inset-0 bg-yellow-400/90 rounded-2xl flex items-center justify-center z-50 animate-pulse">
@@ -45,6 +74,12 @@ export default function SlotMachine() {
               ${gameState.lastWin}
             </div>
           </div>
+        </div>
+      )}
+      {/* Admin Notification Banner */}
+      {showAdminNotification && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-center py-2 px-4 rounded-full shadow-lg z-50">
+          Admin has updated the game rules!
         </div>
       )}
       {/* Header */}
