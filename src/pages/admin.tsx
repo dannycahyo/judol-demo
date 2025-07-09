@@ -294,6 +294,31 @@ export default function AdminPanel() {
                 </ol>
               </div>
 
+              {/* Beginner's Luck Feature Information */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6 mt-8">
+                <h3 className="text-lg font-semibold text-green-800 mb-2">
+                  🍀 Beginner&apos;s Luck Feature
+                </h3>
+                <div className="text-sm text-green-800 space-y-2">
+                  <p>
+                    The game automatically gives new players a higher
+                    chance of winning (75%) on their first two spins.
+                    This &quot;beginner&apos;s luck&quot; effect is
+                    designed to create a positive first experience.
+                  </p>
+                  <p>
+                    After the second spin, the win rate returns to
+                    normal random probability, which is significantly
+                    lower. This psychological technique is commonly
+                    used in real gambling apps to hook new users.
+                  </p>
+                  <p className="font-medium">
+                    Note: Players can reset their game to re-enable
+                    the beginner&apos;s luck feature.
+                  </p>
+                </div>
+              </div>
+
               {/* Quick Actions */}
               <div className="mt-8 flex gap-4">
                 <Link
@@ -375,81 +400,173 @@ export default function AdminPanel() {
                 <div className="mt-6">
                   <div className="bg-gray-50 rounded-lg p-4 mb-4">
                     <h3 className="font-semibold text-gray-800 mb-3">
-                      Winning Combinations (3 matching symbols)
+                      Winning Combinations
                     </h3>
                     <div className="space-y-3 text-gray-700">
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🎰🎰🎰</span>
-                          <span className="font-medium">
-                            Triple Jackpot
+                      {/* High Tier */}
+                      <div className="bg-yellow-50 p-2 rounded-md mb-2">
+                        <h4 className="text-sm font-semibold text-yellow-700 mb-2">
+                          High Payout (10% Chance)
+                        </h4>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">💎💎💎</span>
+                            <span className="font-medium">
+                              Triple Diamond
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            50x bet
                           </span>
                         </div>
-                        <span className="font-bold text-green-600">
-                          50x bet
-                        </span>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">7️⃣7️⃣7️⃣</span>
+                            <span className="font-medium">
+                              Triple Seven
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            30x bet
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">⭐⭐⭐</span>
+                            <span className="font-medium">
+                              Triple Star
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            20x bet
+                          </span>
+                        </div>
                       </div>
 
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">💎💎💎</span>
-                          <span className="font-medium">
-                            Triple Diamond
+                      {/* Medium Tier */}
+                      <div className="bg-blue-50 p-2 rounded-md mb-2">
+                        <h4 className="text-sm font-semibold text-blue-700 mb-2">
+                          Medium Payout (30% Chance)
+                        </h4>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">���</span>
+                            <span className="font-medium">
+                              Triple Bell
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            15x bet
                           </span>
                         </div>
-                        <span className="font-bold text-green-600">
-                          25x bet
-                        </span>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🍊🍊🍊</span>
+                            <span className="font-medium">
+                              Triple Orange
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            10x bet
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🍋🍋🍋</span>
+                            <span className="font-medium">
+                              Triple Lemon
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            8x bet
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🍒🍒🍒</span>
+                            <span className="font-medium">
+                              Triple Cherry
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            5x bet
+                          </span>
+                        </div>
                       </div>
 
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🍊🍊🍊</span>
-                          <span className="font-medium">
-                            Triple Orange
+                      {/* Low Tier */}
+                      <div className="bg-green-50 p-2 rounded-md mb-2">
+                        <h4 className="text-sm font-semibold text-green-700 mb-2">
+                          Low Payout (60% Chance)
+                        </h4>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">💎💎</span>
+                            <span className="font-medium">
+                              Double Diamond
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            3x bet
                           </span>
                         </div>
-                        <span className="font-bold text-green-600">
-                          10x bet
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🍋🍋🍋</span>
-                          <span className="font-medium">
-                            Triple Lemon
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">7️⃣7️⃣</span>
+                            <span className="font-medium">
+                              Double Seven
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            2x bet
                           </span>
                         </div>
-                        <span className="font-bold text-green-600">
-                          5x bet
-                        </span>
-                      </div>
-
-                      <div className="flex justify-between items-center py-2 px-3 bg-white rounded">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-2xl">🍒🍒🍒</span>
-                          <span className="font-medium">
-                            Triple Cherry
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🍒🍒</span>
+                            <span className="font-medium">
+                              Double Cherry
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            2x bet
                           </span>
                         </div>
-                        <span className="font-bold text-green-600">
-                          3x bet
-                        </span>
+                        <div className="flex justify-between items-center py-2 px-3 bg-white rounded mt-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🍒</span>
+                            <span className="font-medium">
+                              Single Cherry (1st position)
+                            </span>
+                          </div>
+                          <span className="font-bold text-green-600">
+                            1x bet
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <h4 className="font-semibold text-yellow-800 mb-2">
-                      📊 Probability Analysis
+                      📊 Symbol Probability Analysis
                     </h4>
-                    <p className="text-sm text-yellow-800">
-                      While high payouts look attractive, remember
-                      that 🎰 symbols only appear 2% of the time per
-                      reel. The chance of hitting 🎰🎰🎰 is only
-                      0.008% (1 in 12,500 spins).
-                    </p>
+                    <div className="text-sm text-yellow-800 space-y-2">
+                      <p>Symbol weights determine their frequency:</p>
+                      <ul className="list-disc pl-5 space-y-1">
+                        <li>🍒 Cherry: 30% (Most common)</li>
+                        <li>🍋 Lemon: 25%</li>
+                        <li>🍊 Orange: 20%</li>
+                        <li>🔔 Bell: 10%</li>
+                        <li>⭐ Star: 8%</li>
+                        <li>💎 Diamond: 5%</li>
+                        <li>7️⃣ Seven: 2% (Rarest)</li>
+                      </ul>
+                      <p className="mt-2">
+                        The chance of hitting 7️⃣7️⃣7️⃣ is about 1 in
+                        125,000 spins.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

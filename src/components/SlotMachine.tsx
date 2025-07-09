@@ -63,6 +63,18 @@ export default function SlotMachine() {
         </div>
       )}
 
+      {/* Beginner's Luck Indicator */}
+      {gameState.beginnersLuck && (
+        <div className="absolute top-4 left-4 bg-green-500/90 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-pulse">
+          <div className="flex items-center space-x-2">
+            <span className="text-lg">🍀</span>
+            <span className="font-semibold">
+              Beginner&apos;s Luck Active!
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Win Celebration Overlay */}
       {showWinCelebration && gameState.lastWin > 0 && (
         <div className="absolute inset-0 bg-yellow-400/90 rounded-2xl flex items-center justify-center z-50 animate-pulse">
@@ -119,6 +131,19 @@ export default function SlotMachine() {
           </div>
         </div>
       </div>
+
+      {/* Beginner's Luck Info */}
+      {gameState.beginnersLuck && gameState.totalSpins < 2 && (
+        <div className="bg-green-500/20 backdrop-blur-sm rounded-lg p-3 mb-6 text-center">
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-lg">🍀</span>
+            <span className="text-sm text-green-400 font-medium">
+              Beginner&apos;s Luck: Higher chance to win on your first
+              2 spins!
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Slot Machine */}
       <div className="bg-gradient-to-b from-yellow-400 to-yellow-600 p-8 rounded-2xl shadow-inner mb-8">
