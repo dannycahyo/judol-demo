@@ -1,40 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Responsible Gambling Simulator
 
-## Getting Started
+An educational slot machine simulator designed to demonstrate the mechanics of gambling games and how outcomes can be controlled. This application serves as a powerful tool for educators, counselors, and presenters to discuss gambling awareness and system fairness.
 
-First, run the development server:
+## 🎯 Purpose
+
+This application is an educational demo that:
+
+- Demonstrates how slot machines work (RNG, RTP, House Edge)
+- Shows that gambling outcomes are controlled by the system, not the player
+- Provides a safe environment to understand gambling mechanics without financial risk
+- Includes a hidden admin panel for powerful presentation moments
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Neon Database account (for persistent admin controls)
+
+### Environment Setup
+
+1. Create a `.env` file in the root directory
+2. Add your Neon database connection string:
+
+```bash
+DATABASE_URL=postgresql://[your-neon-connection-string]
+```
+
+### Installation
+
+1. Clone the repository and navigate to the project directory
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+The database will be automatically initialized on first API request.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+npm run dev
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎮 How to Use
 
-## Learn More
+### For Players (Educational Experience)
 
-To learn more about Next.js, take a look at the following resources:
+1. Visit the main page at `http://localhost:3000`
+2. Use the slot machine interface:
+   - Adjust bet amount with +/- buttons
+   - Click "SPIN" to play
+   - View your balance, wins, and statistics
+3. Learn about gambling mechanics:
+   - Click "How It Works" to understand RNG and RTP
+   - Click "Payout Table" to see winning combinations
+   - Observe how the house edge works over time
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+### For Presenters/Educators (Admin Features)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Let audience members play normally for several spins
+2. Discreetly navigate to `http://localhost:3000/admin`
+3. Use the Admin Control Panel to:
+   - View current game statistics
+   - Set next spin outcome (Win/Loss/Normal RNG)
+   - Create predetermined results for demonstration
+4. Return to main game and have audience spin again
+5. Reveal the admin panel to show how outcomes were controlled
+6. Discuss implications for trust and fairness in real gambling
 
-## Deploy on Vercel
+## 🔧 Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Main Game Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+- **Slot Machine Simulation**: Classic 3-reel slot with multiple symbols
+- **Realistic Game Mechanics**:
+  - Configurable bet amounts
+  - Balance tracking
+  - Win/loss calculations
+  - Session statistics
+- **Educational Content**:
+  - RNG and RTP explanations
+  - Detailed payout table
+  - Real-time statistics showing house edge
+- **Visual Effects**:
+  - Spinning animations
+  - Win celebrations
+  - Modern, attractive UI
+
+### Admin Panel Features
+
+- **Global Outcome Control**: Force next spin to win, lose, or use normal RNG (affects ALL users globally)
+- **Real-time Updates**: Changes propagate to all players within 2 seconds
+- **Game Monitoring**: View player's current balance, bet amount, and statistics
+- **Automatic Reset**: Control reverts to normal RNG after forced spins
+- **Persistent Database**: Settings stored in PostgreSQL database, not browser storage
+- **Audit Trail**: Complete history of all admin interventions
+
+## 📊 Game Mechanics
+
+### Symbols & Payouts
+
+- 💎💎💎: 50x bet
+- 7️⃣7️⃣7️⃣: 30x bet
+- ⭐⭐⭐: 20x bet
+- 🔔🔔🔔: 15x bet
+- 🍊🍊🍊: 10x bet
+- 🍋🍋🍋: 8x bet
+- 🍒🍒🍒: 5x bet
+- Two-of-a-kind and single cherry combinations also pay
+
+### RTP Configuration
+
+- Approximately 85% Return to Player
+- 15% House Edge (typical for demonstration)
+
+## ⚠️ Disclaimer
+
+This application is for educational purposes only. It does not involve real money and should not be used to promote gambling. The goal is to educate about gambling mechanics and promote responsible decision-making regarding gambling activities.
