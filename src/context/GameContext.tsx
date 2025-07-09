@@ -31,20 +31,20 @@ const GameContext = createContext<GameContextType | undefined>(
   undefined,
 );
 
-const INITIAL_BALANCE = 1000;
-const SYMBOLS = ['🍒', '🍋', '🍊', '🔔', '⭐', '💎', '7️⃣'];
+const INITIAL_BALANCE = 1000000; // 1 million Rupiah
+const SYMBOLS = ['🍒', '🍋', '🍊', '🔔', '⭐', '💎', '🧨'];
 
 // Payout table (multiplier of bet amount)
 const PAYOUTS: Record<string, number> = {
   '💎💎💎': 50,
-  '7️⃣7️⃣7️⃣': 30,
+  '🧨🧨🧨': 30,
   '⭐⭐⭐': 20,
   '🔔🔔🔔': 15,
   '🍊🍊🍊': 10,
   '🍋🍋🍋': 8,
   '🍒🍒🍒': 5,
   '💎💎': 3,
-  '7️⃣7️⃣': 2,
+  '🧨🧨': 2,
   '🍒🍒': 2,
   '🍒': 1,
 };
@@ -52,7 +52,7 @@ const PAYOUTS: Record<string, number> = {
 export function GameProvider({ children }: { children: ReactNode }) {
   const [gameState, setGameState] = useState<GameState>({
     balance: INITIAL_BALANCE,
-    betAmount: 10,
+    betAmount: 10000, // 10,000 Rupiah
     lastWin: 0,
     totalSpins: 0,
     totalWins: 0,
@@ -313,7 +313,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const resetGame = async () => {
     setGameState({
       balance: INITIAL_BALANCE,
-      betAmount: 10,
+      betAmount: 10000,
       lastWin: 0,
       totalSpins: 0,
       totalWins: 0,

@@ -1,5 +1,10 @@
-import { useGame } from '../context/GameContext';
+import { useGame, PAYOUTS } from '../context/GameContext';
 import { useState, useEffect } from 'react';
+
+// Helper function to format currency in Indonesian Rupiah
+const formatRupiah = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID').format(amount);
+};
 
 export default function SlotMachine() {
   const { gameState, setBetAmount, spin } = useGame();
@@ -9,6 +14,7 @@ export default function SlotMachine() {
   const [lastOverride, setLastOverride] = useState(
     gameState.outcomeOverride,
   );
+  const [isPayoutsVisible, setIsPayoutsVisible] = useState(false);
 
   const handleSpin = async () => {
     if (gameState.balance < gameState.betAmount) {
@@ -42,11 +48,11 @@ export default function SlotMachine() {
   }, [gameState.outcomeOverride, lastOverride]);
 
   const increaseBet = () => {
-    setBetAmount(gameState.betAmount + 5);
+    setBetAmount(gameState.betAmount + 5000);
   };
 
   const decreaseBet = () => {
-    setBetAmount(gameState.betAmount - 5);
+    setBetAmount(gameState.betAmount - 5000);
   };
 
   return (
@@ -71,7 +77,7 @@ export default function SlotMachine() {
               🎉 WIN! 🎉
             </div>
             <div className="text-4xl font-bold text-purple-900">
-              ${gameState.lastWin}
+              Rp {formatRupiah(gameState.lastWin)}
             </div>
           </div>
         </div>
@@ -84,7 +90,7 @@ export default function SlotMachine() {
       )}
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
           🎰 Pragmatic Play - No. 1 Slot Gacor
         </h1>
         <p className="text-purple-200">
@@ -96,18 +102,18 @@ export default function SlotMachine() {
       <div className="grid grid-cols-3 gap-4 mb-8">
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
           <div className="text-xl md:text-2xl font-bold text-yellow-400">
-            ${gameState.balance}
+            {formatRupiah(gameState.balance)}
           </div>
           <div className="text-purple-200 text-xs md:text-sm">
-            Balance
+            Saldo
           </div>
         </div>
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
           <div className="text-xl md:text-2xl font-bold text-green-400">
-            ${gameState.lastWin}
+            {formatRupiah(gameState.lastWin)}
           </div>
           <div className="text-purple-200 text-xs md:text-sm">
-            Last Win
+            Kemenangan Terakhir
           </div>
         </div>
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
@@ -115,7 +121,7 @@ export default function SlotMachine() {
             {gameState.totalSpins}
           </div>
           <div className="text-purple-200 text-xs md:text-sm">
-            Total Spins
+            Total Putaran
           </div>
         </div>
       </div>
@@ -150,16 +156,18 @@ export default function SlotMachine() {
           <button
             onClick={decreaseBet}
             disabled={
-              gameState.betAmount <= 5 || gameState.isSpinning
+              gameState.betAmount <= 5000 || gameState.isSpinning
             }
             className="bg-red-500 hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg transition-colors"
           >
             -
           </button>
           <div className="bg-white rounded-lg px-6 py-2 min-w-24 text-center">
-            <div className="text-sm text-gray-800 font-bold">Bet</div>
+            <div className="text-sm text-gray-800 font-bold">
+              Taruhan
+            </div>
             <div className="text-xl font-bold text-gray-900">
-              ${gameState.betAmount}
+              {formatRupiah(gameState.betAmount)}
             </div>
           </div>
           <button
@@ -189,23 +197,65 @@ export default function SlotMachine() {
         </div>
       </div>
 
+      {/* Payout Table Accordion */}
+      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8">
+        <button
+          onClick={() => setIsPayoutsVisible(!isPayoutsVisible)}
+          className="w-full flex justify-between items-center text-left text-white font-semibold"
+        >
+          <span>Tabel Pembayaran (Payout Table)</span>
+          <span
+            className={`transform transition-transform ${
+              isPayoutsVisible ? 'rotate-180' : ''
+            }`}
+          >
+            ▼
+          </span>
+        </button>
+        {isPayoutsVisible && (
+          <div className="mt-4">
+            <ul className="space-y-2 text-sm">
+              {Object.entries(PAYOUTS).map(
+                ([combination, multiplier]) => (
+                  <li
+                    key={combination}
+                    className="flex justify-between items-center bg-white/5 p-2 rounded-md"
+                  >
+                    <span className="text-lg font-mono">
+                      {[...combination].join(' ')}
+                    </span>
+                    <span className="font-bold text-yellow-400">
+                      x{multiplier}
+                    </span>
+                  </li>
+                ),
+              )}
+            </ul>
+            <p className="text-xs text-purple-200 mt-2">
+              Kemenangan dihitung dari jumlah taruhan dikalikan dengan
+              pengganda.
+            </p>
+          </div>
+        )}
+      </div>
+
       {/* Game Statistics */}
       <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
         <h3 className="text-white font-semibold mb-2">
-          Session Statistics
+          Statistik Sesi
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div className="text-center">
             <div className="text-lg font-bold text-yellow-400">
               {gameState.totalSpins}
             </div>
-            <div className="text-purple-200">Total Spins</div>
+            <div className="text-purple-200">Total Putaran</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-green-400">
               {gameState.totalWins}
             </div>
-            <div className="text-purple-200">Wins</div>
+            <div className="text-purple-200">Kemenangan</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-red-400">
@@ -217,13 +267,13 @@ export default function SlotMachine() {
                 : 0}
               %
             </div>
-            <div className="text-purple-200">Win Rate</div>
+            <div className="text-purple-200">Peluang Menang</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-bold text-orange-400">
-              ${1000 - gameState.balance}
+              Rp {formatRupiah(1000000 - gameState.balance)}
             </div>
-            <div className="text-purple-200">Net Loss</div>
+            <div className="text-purple-200">Total Kerugian</div>
           </div>
         </div>
       </div>
