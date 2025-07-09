@@ -231,7 +231,7 @@ export default function SlotMachine() {
                 ),
               )}
             </ul>
-            <p className="text-xs text-purple-200 mt-2">
+            <p className="text-md text-center font-bold text-purple-200 mt-2">
               Kemenangan dihitung dari jumlah taruhan dikalikan dengan
               pengganda.
             </p>
