@@ -15,6 +15,9 @@ export default function SlotMachine() {
     gameState.outcomeOverride,
   );
   const [isPayoutsVisible, setIsPayoutsVisible] = useState(false);
+  const [betInput, setBetInput] = useState(
+    gameState.betAmount.toString(),
+  );
 
   const handleSpin = async () => {
     if (gameState.balance < gameState.betAmount) {
@@ -47,12 +50,47 @@ export default function SlotMachine() {
     setLastOverride(gameState.outcomeOverride);
   }, [gameState.outcomeOverride, lastOverride]);
 
+  // Sync bet input with game state
+  useEffect(() => {
+    setBetInput(gameState.betAmount.toString());
+  }, [gameState.betAmount]);
+
   const increaseBet = () => {
     setBetAmount(gameState.betAmount + 5000);
+    setBetInput((gameState.betAmount + 5000).toString());
   };
 
   const decreaseBet = () => {
     setBetAmount(gameState.betAmount - 5000);
+    setBetInput((gameState.betAmount - 5000).toString());
+  };
+
+  const handleBetInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = e.target.value;
+    // Only allow numbers
+    if (value === '' || /^\d+$/.test(value)) {
+      setBetInput(value);
+    }
+  };
+
+  const handleBetInputBlur = () => {
+    const numericValue = parseInt(betInput) || 5000;
+    const clampedValue = Math.max(
+      5000,
+      Math.min(numericValue, gameState.balance),
+    );
+    setBetAmount(clampedValue);
+    setBetInput(clampedValue.toString());
+  };
+
+  const handleBetInputKeyPress = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === 'Enter') {
+      handleBetInputBlur();
+    }
   };
 
   return (
@@ -162,13 +200,23 @@ export default function SlotMachine() {
           >
             -
           </button>
-          <div className="bg-white rounded-lg px-6 py-2 min-w-24 text-center">
-            <div className="text-sm text-gray-800 font-bold">
+          <div className="bg-white rounded-lg px-6 py-2 min-w-32 text-center">
+            <div className="text-sm text-gray-800 font-bold mb-1">
               Taruhan
             </div>
-            <div className="text-xl font-bold text-gray-900">
-              {formatRupiah(gameState.betAmount)}
+            <div className="text-base font-bold text-gray-900 mb-1">
+              Rp {formatRupiah(gameState.betAmount)}
             </div>
+            <input
+              type="text"
+              value={betInput}
+              onChange={handleBetInputChange}
+              onBlur={handleBetInputBlur}
+              onKeyPress={handleBetInputKeyPress}
+              disabled={gameState.isSpinning}
+              placeholder="Masukkan jumlah"
+              className="w-full text-center text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            />
           </div>
           <button
             onClick={increaseBet}
