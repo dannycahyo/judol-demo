@@ -215,7 +215,7 @@ export default function SlotMachine() {
               onKeyPress={handleBetInputKeyPress}
               disabled={gameState.isSpinning}
               placeholder="Masukkan jumlah"
-              className="w-full text-center text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="w-full text-center text-sm border text-gray-800 font-bold border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
           </div>
           <button
