@@ -282,11 +282,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     // Check outcome override
     if (gameState.outcomeOverride === 'WIN') {
       newReels = generateWinningReels();
-      // Reset override after use via API
       await resetOutcomeOverride();
     } else if (gameState.outcomeOverride === 'LOSS') {
       newReels = generateLosingReels();
-      // Reset override after use via API
       await resetOutcomeOverride();
     } else {
       // Normal RNG
