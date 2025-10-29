@@ -63,6 +63,73 @@ export function GameProvider({ children }: { children: ReactNode }) {
     beginnersLuck: true, // Start with beginner's luck enabled
   });
 
+  // Helper: Reset outcome override to RNG via API
+  const resetOutcomeOverride = async () => {
+    try {
+      await fetch('/api/admin-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ outcomeOverride: 'RNG' }),
+      });
+    } catch (error) {
+      console.error('Error resetting game settings:', error);
+    }
+  };
+
+  // Helper: Update admin settings via API
+  const updateAdminSettings = async (
+    outcomeOverride: OutcomeOverride,
+  ) => {
+    try {
+      console.log(
+        `🎮 Setting outcome override to: ${outcomeOverride}`,
+      );
+      const response = await fetch('/api/admin-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ outcomeOverride }),
+      });
+
+      if (response.ok) {
+        try {
+          const result = await response.json();
+          console.log('✅ Admin settings updated:', result);
+          return result;
+        } catch (jsonError) {
+          console.error(
+            'Error parsing admin settings response:',
+            jsonError,
+          );
+        }
+      } else {
+        console.error(
+          'Failed to update game settings. Status:',
+          response.status,
+        );
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+      }
+    } catch (error) {
+      console.error('Error setting outcome override:', error);
+    }
+  };
+
+  // Helper: Fetch game settings from API
+  const fetchGameSettings = async () => {
+    try {
+      const response = await fetch('/api/game-settings');
+      if (response.ok) {
+        const data = await response.json();
+        setGameState((prev) => ({
+          ...prev,
+          outcomeOverride: data.outcomeOverride,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching game settings:', error);
+    }
+  };
+
   // Connect to SSE for real-time updates
   useEffect(() => {
     let eventSource: EventSource | null = null;
@@ -116,18 +183,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     };
 
     const fallbackFetch = async () => {
-      try {
-        const response = await fetch('/api/game-settings');
-        if (response.ok) {
-          const data = await response.json();
-          setGameState((prev) => ({
-            ...prev,
-            outcomeOverride: data.outcomeOverride,
-          }));
-        }
-      } catch (error) {
-        console.error('Error fetching game settings:', error);
-      }
+      await fetchGameSettings();
     };
 
     // Start SSE connection
@@ -338,27 +394,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (gameState.outcomeOverride === 'WIN') {
       newReels = generateWinningReels();
       // Reset override after use via API
-      try {
-        await fetch('/api/admin-settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ outcomeOverride: 'RNG' }),
-        });
-      } catch (error) {
-        console.error('Error resetting game settings:', error);
-      }
+      await resetOutcomeOverride();
     } else if (gameState.outcomeOverride === 'LOSS') {
       newReels = generateLosingReels();
       // Reset override after use via API
-      try {
-        await fetch('/api/admin-settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ outcomeOverride: 'RNG' }),
-        });
-      } catch (error) {
-        console.error('Error resetting game settings:', error);
-      }
+      await resetOutcomeOverride();
     } else {
       // Apply beginner's luck for the first two spins
       if (gameState.beginnersLuck && gameState.totalSpins < 2) {
@@ -402,44 +442,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
   };
 
   const setOutcomeOverride = async (override: OutcomeOverride) => {
-    try {
-      console.log(`🎮 Setting outcome override to: ${override}`);
-      const response = await fetch('/api/admin-settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ outcomeOverride: override }),
-      });
-
-      if (response.ok) {
-        try {
-          const result = await response.json();
-          console.log('✅ Admin settings updated:', result);
-          setGameState((prev) => ({
-            ...prev,
-            outcomeOverride: override,
-          }));
-        } catch (jsonError) {
-          console.error(
-            'Error parsing admin settings response:',
-            jsonError,
-          );
-          // Still update local state even if JSON parsing fails
-          setGameState((prev) => ({
-            ...prev,
-            outcomeOverride: override,
-          }));
-        }
-      } else {
-        console.error(
-          'Failed to update game settings. Status:',
-          response.status,
-        );
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-      }
-    } catch (error) {
-      console.error('Error setting outcome override:', error);
-    }
+    await updateAdminSettings(override);
+    // Update local state regardless of API result
+    setGameState((prev) => ({
+      ...prev,
+      outcomeOverride: override,
+    }));
   };
 
   const resetGame = async () => {
@@ -456,15 +464,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     });
 
     // Reset game settings in database as well
-    try {
-      await fetch('/api/admin-settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ outcomeOverride: 'RNG' }),
-      });
-    } catch (error) {
-      console.error('Error resetting game settings:', error);
-    }
+    await resetOutcomeOverride();
   };
 
   return (
